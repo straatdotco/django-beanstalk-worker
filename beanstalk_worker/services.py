@@ -15,6 +15,8 @@ def json_dump(obj):
         return {"__type__": "datetime", "value": obj.isoformat()}
     elif isinstance(obj, decimal.Decimal):
         return {"__type__": "decimal", "value": str(obj)}
+    elif isinstance(obj, set):
+        return {"__type__": "set", "value": list(obj)}
     else:
         assert False, type(obj)
 
@@ -25,6 +27,8 @@ def json_load(obj):
             return dateparser.parse(obj["value"])
         elif obj["__type__"] == "decimal":
             return decimal.Decimal(obj["value"])
+        elif obj["__type__"] == "set":
+            return set(obj["value"])
         else:
             assert False
     else:
